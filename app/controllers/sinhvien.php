@@ -3,10 +3,11 @@ class sinhvien
 {
     public function index()
     {
-        echo "day la controller sinhvien";
+    //tra ve view
+        require_once '../app/views/sinhvien/index.php';
     }
     public function create(){
-        echo "day la trang tao sinh vien";
+        require_once '../app/views/sinhvien/create.php';
     }
 }
 ?>
