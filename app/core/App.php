@@ -11,7 +11,6 @@ class App
         
         $urlProcessed = $this->UrlProcess(); //mang url dc xu ly
         // var_dump($urlProcessed);
-
         //xu ly controller
         if(isset($urlProcessed[0]) ) {
             if(file_exists('../app/controllers/'.$urlProcessed[0].'.php')){

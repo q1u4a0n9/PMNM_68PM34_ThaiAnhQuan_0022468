@@ -19,7 +19,9 @@ class middleware
         // 3. Tiến hành kiểm tra
         if(!isset($_SESSION["username"]) && !in_array($currentUrl, $publicPages)){
             // Nếu chưa đăng nhập và đang vào trang cấm -> Đá về login
-            header("Location: /home/login");
+            // Code cũ: header("Location: /home/login");
+// Code mới:
+header("Location: /QLSV/public/home/login");
             exit();
         }
      }

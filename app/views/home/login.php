@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Trang Dang nhap</h1>
-    <form action="/auth/login" method="post">
+    <form action="/QLSV/public/auth/login" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
         <label for="password">Password:</label>

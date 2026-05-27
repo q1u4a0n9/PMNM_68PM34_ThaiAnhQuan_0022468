@@ -11,10 +11,11 @@ class auth
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
         if(isset($this->user[$username]) && $this->user[$username] == $password){
-            header('Location: /home/index');
+        $_SESSION['username'] = $username;   
+        header('Location: /QLSV/public/home/index');
             exit();
         }else{
-            header('Location: /home/login');
+            header('Location: /QLSV/public/home/login');
             exit();
         }
     }
