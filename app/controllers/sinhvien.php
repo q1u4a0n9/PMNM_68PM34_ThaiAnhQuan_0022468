@@ -1,19 +1,59 @@
 <?php
 require_once '../app/core/Controller.php';
 require_once '../app/models/sinhvienModel.php';
+
 class sinhvien extends Controller
 {
-    public function index()
+    // Thêm tham số $page vào hàm index, mặc định là trang 1
+    
+    public function index($page = 1)
     {
+        
         $sinhvienModel = $this->model('sinhvienModel');
-        $sinhviens = $sinhvienModel->getAllSinhVien();
-$this->view("sinhvien/index", [
-    'sinhviens' => $sinhviens, 
-    'title'     => "Danh sách sinh viên"
-]);
+        
+        // --- BẮT ĐẦU LOGIC PHÂN TRANG ---
+        $limit = 5; // Số sinh viên hiển thị trên 1 trang (bạn có thể đổi thành 10)
+        
+        // Đảm bảo $page là số nguyên hợp lệ lớn hơn 0
+        $page = is_numeric($page) && $page > 0 ? (int)$page : 1;
+        
+        // Tính vị trí bắt đầu lấy dữ liệu trong Database
+        $offset = ($page - 1) * $limit;
+        
+        // Lấy tổng số lượng sinh viên và tính ra tổng số trang
+        $totalSV = $sinhvienModel->getTotalSinhVien();
+        $totalPages = ceil($totalSV / $limit);
+        
+        // Lấy dữ liệu 5 sinh viên của trang hiện tại
+        $sinhviens = $sinhvienModel->getSinhVienPaging($limit, $offset);
+        // --- KẾT THÚC LOGIC PHÂN TRANG ---
+
+        // Truyền thêm dữ liệu tính toán được sang View
+        $this->view("layout/main-layout", [
+            'viewname'    => 'sinhvien/index',
+            'sinhviens'   => $sinhviens, 
+            'totalPages'  => $totalPages,
+            'currentPage' => $page,
+            'title'       => "Danh sách sinh viên"
+        ]);
     }
+    
     public function create(){
         require_once '../app/views/sinhvien/create.php';
     }
+
+    public function store(){
+        $hoten = $_POST['hoten'];
+        $gioitinh = $_POST['gioitinh'];
+        $mssv = $_POST['mssv'];
+        $sinhvienModel = $this->model('sinhvienModel');
+        $result = $sinhvienModel->create($hoten, $gioitinh, $mssv);
+        if($result) {
+            header("Location: /QLSV/public/sinhvien/index");
+        } else {
+            echo "Thêm mới sinh viên thất bại";
+        }
+    }
+
 }
 ?>
