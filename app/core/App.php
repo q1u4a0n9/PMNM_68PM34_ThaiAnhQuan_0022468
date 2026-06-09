@@ -35,12 +35,24 @@ class App
 
     }
     //ham xu ly url
+    // Hàm xử lý url thông minh hơn
     public function UrlProcess()
     {
         if (isset($_GET['url'])){
-            return explode('/', filter_var(trim($_GET['url'], '/')));
+            // Cắt URL thành mảng
+            $url = explode('/', filter_var(trim($_GET['url'], '/')));
+            
+            // Xóa phần tử 'QLSV' và 'public' nếu thư mục gốc bị dính vào URL
+            if (isset($url[0]) && $url[0] === 'QLSV') {
+                unset($url[0]);
+            }
+            if (isset($url[1]) && $url[1] === 'public') {
+                unset($url[1]);
+            }
+            
+            // Sắp xếp lại thứ tự mảng (0, 1, 2...) để Router đọc chuẩn
+            return array_values($url); 
         }
-        
     }
 
  

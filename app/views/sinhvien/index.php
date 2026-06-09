@@ -38,6 +38,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>STT</th>
                     <th>ID</th>
                     <th>Họ Tên</th>
                     <th>Giới Tính</th>
@@ -46,11 +47,13 @@
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 if (!empty($sinhviens)) {
-                    foreach ($sinhviens as $sv) { 
+                    $stt = ($currentPage - 1) * 5 + 1;
+                    foreach ($sinhviens as $sv) {
                 ?>
                     <tr>
+                        <td><?php echo $stt++; ?></td>
                         <td><strong>#<?php echo $sv['id']; ?></strong></td>
                         <td><?php echo $sv['hoten']; ?></td>
                         <td><?php echo $sv['gioitinh']; ?></td>

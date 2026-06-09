@@ -1,10 +1,6 @@
 <?php
 require_once("../app/core/App.php");
 
-// Chỉ nên gọi session_start() nếu session chưa tồn tại để tránh cảnh báo (warning)
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 class middleware
 {
@@ -21,7 +17,7 @@ class middleware
             // Nếu chưa đăng nhập và đang vào trang cấm -> Đá về login
             // Code cũ: header("Location: /home/login");
 // Code mới:
-header("Location: /QLSV/public/home/login");
+        header("Location: /QLSV/public/home/login");
             exit();
         }
      }

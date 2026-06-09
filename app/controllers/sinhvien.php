@@ -6,7 +6,7 @@ class sinhvien extends Controller
 {
     // Thêm tham số $page vào hàm index, mặc định là trang 1
     
-    public function index($page = 1)
+    public function index( $page = 1)
     {
         
         $sinhvienModel = $this->model('sinhvienModel');
