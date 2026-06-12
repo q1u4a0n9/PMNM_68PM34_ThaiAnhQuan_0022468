@@ -66,6 +66,13 @@ class sinhvien extends Controller
         }
     }
 
+    public function delete($id) {
+        $sinhvienModel = $this->model('sinhvienModel');
+        $sinhvienModel->delete($id);
+        header("Location: /QLSV/public/sinhvien/index");
+        exit();
+    }
+
     public function create(){
         require_once '../app/views/sinhvien/create.php';
     }
@@ -84,4 +91,3 @@ class sinhvien extends Controller
     }
 
 }
-?>

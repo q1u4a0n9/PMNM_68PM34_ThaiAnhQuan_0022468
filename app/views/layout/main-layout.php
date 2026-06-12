@@ -18,7 +18,7 @@
             height: 80px;
             background-color: red;
             color: white; /* Thêm màu chữ để dễ đọc */
-            
+           
         }
 
         /* CSS cho phần thân trang để không bị footer che khuất */

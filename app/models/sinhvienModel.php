@@ -47,6 +47,12 @@ class sinhvienModel
         return $stmt->execute();
     }
 
+    public function delete($id) {
+        $stmt = $this->conn->prepare("DELETE FROM tbl_sinhviens WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public function create($hoten, $gioitinh, $mssv) {
         $query = "INSERT INTO tbl_sinhviens (hoten, gioitinh, mssv) VALUES (:hoten, :gioitinh, :mssv)";
         $stmt = $this->conn->prepare($query);
