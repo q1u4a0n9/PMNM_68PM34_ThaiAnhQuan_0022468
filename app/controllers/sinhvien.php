@@ -38,6 +38,34 @@ class sinhvien extends Controller
         ]);
     }
     
+    public function edit($id) {
+        $sinhvienModel = $this->model('sinhvienModel');
+        $sinhvien = $sinhvienModel->getById($id);
+        if (!$sinhvien) {
+            header("Location: /QLSV/public/sinhvien/index");
+            exit();
+        }
+        $this->view("layout/main-layout", [
+            'viewname' => 'sinhvien/edit',
+            'sinhvien' => $sinhvien,
+            'title'    => "Sửa thông tin sinh viên"
+        ]);
+    }
+
+    public function update() {
+        $id       = $_POST['id'];
+        $hoten    = $_POST['hoten'];
+        $gioitinh = $_POST['gioitinh'];
+        $mssv     = $_POST['mssv'];
+        $sinhvienModel = $this->model('sinhvienModel');
+        $result = $sinhvienModel->update($id, $hoten, $gioitinh, $mssv);
+        if ($result) {
+            header("Location: /QLSV/public/sinhvien/index");
+        } else {
+            echo "Cập nhật sinh viên thất bại";
+        }
+    }
+
     public function create(){
         require_once '../app/views/sinhvien/create.php';
     }
