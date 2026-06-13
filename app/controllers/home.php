@@ -1,23 +1,21 @@
 <?php
-class home
+require_once '../app/core/Controller.php';
+
+class home extends Controller
 {
     public function index()
-    {   
-        require_once '../app/views/layout/main-layout.php';
-        // Đã thêm app/ vào đường dẫn
-        require_once '../app/views/home/index.php';
-        
-    }
-
-    public function about()
     {
-        // Đã thêm app/ vào đường dẫn
-        require_once '../app/views/home/about.php';
+        $this->view("layout/main-layout", [
+            'viewname' => 'home/index',
+            'title'    => 'Trang chủ'
+        ]);
     }
 
     public function login()
     {
-        require_once '../app/views/home/login.php';
+        $this->view("layout/main-layout", [
+            'viewname' => 'home/login',
+            'title'    => 'Đăng nhập'
+        ]);
     }
 }
-?>

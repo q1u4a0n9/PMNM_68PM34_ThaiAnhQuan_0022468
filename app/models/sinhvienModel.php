@@ -15,22 +15,38 @@ class sinhvienModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // THÊM MỚI: Đếm tổng số lượng sinh viên
-    public function getTotalSinhVien() {
-        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM tbl_sinhviens");
+    // Đếm tổng số lượng sinh viên (hỗ trợ search)
+    public function getTotalSinhVien($keyword = '', $lop_id = 0) {
+        $kw = '%' . $keyword . '%';
+        $stmt = $this->conn->prepare(
+            "SELECT COUNT(*) FROM tbl_sinhviens sv
+             WHERE (sv.hoten LIKE :kw1 OR sv.mssv LIKE :kw2)
+               AND (:lop1 = 0 OR sv.lop_id = :lop2)"
+        );
+        $stmt->bindValue(':kw1',  $kw);
+        $stmt->bindValue(':kw2',  $kw);
+        $stmt->bindValue(':lop1', $lop_id, PDO::PARAM_INT);
+        $stmt->bindValue(':lop2', $lop_id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchColumn(); 
+        return $stmt->fetchColumn();
     }
 
-    // THÊM MỚI: Lấy danh sách sinh viên có giới hạn để phân trang
-    public function getSinhVienPaging($limit, $offset) {
+    // Lấy danh sách sinh viên có phân trang + search
+    public function getSinhVienPaging($limit, $offset, $keyword = '', $lop_id = 0) {
+        $kw = '%' . $keyword . '%';
         $stmt = $this->conn->prepare(
             "SELECT sv.*, lh.malop, lh.tenlop
              FROM tbl_sinhviens sv
              LEFT JOIN tbl_lophocs lh ON sv.lop_id = lh.id
+             WHERE (sv.hoten LIKE :kw1 OR sv.mssv LIKE :kw2)
+               AND (:lop1 = 0 OR sv.lop_id = :lop2)
              LIMIT :limit OFFSET :offset"
         );
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':kw1',  $kw);
+        $stmt->bindValue(':kw2',  $kw);
+        $stmt->bindValue(':lop1', $lop_id, PDO::PARAM_INT);
+        $stmt->bindValue(':lop2', $lop_id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

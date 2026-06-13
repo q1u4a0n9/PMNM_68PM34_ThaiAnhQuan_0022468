@@ -1,3 +1,3 @@
-<div class="footer">
-    <p>Đây là footer</p>
-</div>
+<footer class="footer">
+    © 2026 Hệ thống Quản lý Sinh viên — PMNM_68PM34_QLSV
+</footer>

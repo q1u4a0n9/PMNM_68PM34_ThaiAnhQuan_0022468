@@ -6,34 +6,32 @@ class sinhvien extends Controller
 {
     // Thêm tham số $page vào hàm index, mặc định là trang 1
     
-    public function index( $page = 1)
+    public function index($page = 1)
     {
-        
         $sinhvienModel = $this->model('sinhvienModel');
-        
-        // --- BẮT ĐẦU LOGIC PHÂN TRANG ---
-        $limit = 5; // Số sinh viên hiển thị trên 1 trang (bạn có thể đổi thành 10)
-        
-        // Đảm bảo $page là số nguyên hợp lệ lớn hơn 0
-        $page = is_numeric($page) && $page > 0 ? (int)$page : 1;
-        
-        // Tính vị trí bắt đầu lấy dữ liệu trong Database
-        $offset = ($page - 1) * $limit;
-        
-        // Lấy tổng số lượng sinh viên và tính ra tổng số trang
-        $totalSV = $sinhvienModel->getTotalSinhVien();
-        $totalPages = ceil($totalSV / $limit);
-        
-        // Lấy dữ liệu 5 sinh viên của trang hiện tại
-        $sinhviens = $sinhvienModel->getSinhVienPaging($limit, $offset);
-        // --- KẾT THÚC LOGIC PHÂN TRANG ---
+        $lophocModel   = $this->model('lophocModel');
 
-        // Truyền thêm dữ liệu tính toán được sang View
+        $limit   = 5;
+        $page    = is_numeric($page) && $page > 0 ? (int)$page : 1;
+        $offset  = ($page - 1) * $limit;
+
+        $keyword = trim($_GET['keyword'] ?? '');
+        $lop_id  = (int)($_GET['lop_id'] ?? 0);
+
+        $totalSV    = $sinhvienModel->getTotalSinhVien($keyword, $lop_id);
+        $totalPages = ceil($totalSV / $limit);
+        $sinhviens  = $sinhvienModel->getSinhVienPaging($limit, $offset, $keyword, $lop_id);
+        $lophocs    = $lophocModel->getAllLopHoc();
+
         $this->view("layout/main-layout", [
             'viewname'    => 'sinhvien/index',
-            'sinhviens'   => $sinhviens, 
+            'sinhviens'   => $sinhviens,
             'totalPages'  => $totalPages,
+            'totalSV'     => $totalSV,
             'currentPage' => $page,
+            'lophocs'     => $lophocs,
+            'keyword'     => $keyword,
+            'lop_id'      => $lop_id,
             'title'       => "Danh sách sinh viên"
         ]);
     }

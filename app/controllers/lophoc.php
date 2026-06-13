@@ -4,25 +4,27 @@ require_once '../app/models/lophocModel.php';
 
 class lophoc extends Controller
 {
-    // Hiển thị danh sách có phân trang
+    // Hiển thị danh sách có phân trang + search
     public function index($page = 1)
     {
         $lophocModel = $this->model('lophocModel');
-        
-        $limit = 5; 
-        $page = is_numeric($page) && $page > 0 ? (int)$page : 1;
-        $offset = ($page - 1) * $limit;
-        
-        $totalLH = $lophocModel->getTotalLopHoc();
+
+        $limit   = 5;
+        $page    = is_numeric($page) && $page > 0 ? (int)$page : 1;
+        $offset  = ($page - 1) * $limit;
+        $keyword = trim($_GET['keyword'] ?? '');
+
+        $totalLH    = $lophocModel->getTotalLopHoc($keyword);
         $totalPages = ceil($totalLH / $limit);
-        
-        $lophocs = $lophocModel->getLopHocPaging($limit, $offset);
+        $lophocs    = $lophocModel->getLopHocPaging($limit, $offset, $keyword);
 
         $this->view("layout/main-layout", [
             'viewname'    => 'lophoc/index',
-            'lophocs'     => $lophocs, 
+            'lophocs'     => $lophocs,
             'totalPages'  => $totalPages,
+            'totalLH'     => $totalLH,
             'currentPage' => $page,
+            'keyword'     => $keyword,
             'title'       => "Danh sách lớp học"
         ]);
     }

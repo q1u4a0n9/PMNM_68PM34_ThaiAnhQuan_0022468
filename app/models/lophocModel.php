@@ -14,17 +14,30 @@ class lophocModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Đếm tổng số lượng lớp học để phân trang
-    public function getTotalLopHoc() {
-        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM tbl_lophocs");
+    // Đếm tổng số lượng lớp học (hỗ trợ search)
+    public function getTotalLopHoc($keyword = '') {
+        $kw = '%' . $keyword . '%';
+        $stmt = $this->conn->prepare(
+            "SELECT COUNT(*) FROM tbl_lophocs
+             WHERE malop LIKE :kw1 OR tenlop LIKE :kw2"
+        );
+        $stmt->bindValue(':kw1', $kw);
+        $stmt->bindValue(':kw2', $kw);
         $stmt->execute();
-        return $stmt->fetchColumn(); 
+        return $stmt->fetchColumn();
     }
 
-    // Lấy danh sách lớp học có giới hạn để phân trang
-    public function getLopHocPaging($limit, $offset) {
-        $stmt = $this->conn->prepare("SELECT * FROM tbl_lophocs LIMIT :limit OFFSET :offset");
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    // Lấy danh sách lớp học có phân trang + search
+    public function getLopHocPaging($limit, $offset, $keyword = '') {
+        $kw = '%' . $keyword . '%';
+        $stmt = $this->conn->prepare(
+            "SELECT * FROM tbl_lophocs
+             WHERE malop LIKE :kw1 OR tenlop LIKE :kw2
+             LIMIT :limit OFFSET :offset"
+        );
+        $stmt->bindValue(':kw1',  $kw);
+        $stmt->bindValue(':kw2',  $kw);
+        $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
