@@ -73,6 +73,8 @@
         .btn-submit:hover { background-color: #2471a3; }
         .btn-back { display: inline-block; margin-top: 14px; color: #7f8c8d; text-decoration: none; font-size: 14px; }
         .btn-back:hover { color: #333; }
+        .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; box-sizing: border-box; background-color: #fff; }
+        .form-group select:focus { outline: none; border-color: #2980b9; }
     </style>
     
 </head>

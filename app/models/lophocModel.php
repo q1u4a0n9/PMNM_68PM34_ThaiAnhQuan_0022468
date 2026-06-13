@@ -8,6 +8,12 @@ class lophocModel
         $this->conn = DB::ConnectDB();
     }
     
+    public function getAllLopHoc() {
+        $stmt = $this->conn->prepare("SELECT * FROM tbl_lophocs ORDER BY malop");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Đếm tổng số lượng lớp học để phân trang
     public function getTotalLopHoc() {
         $stmt = $this->conn->prepare("SELECT COUNT(*) FROM tbl_lophocs");

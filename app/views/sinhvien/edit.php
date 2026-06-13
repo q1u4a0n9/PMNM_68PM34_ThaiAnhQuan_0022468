@@ -14,6 +14,18 @@
             <label for="mssv">MSSV</label>
             <input type="text" name="mssv" id="mssv" value="<?php echo htmlspecialchars($sinhvien['mssv']); ?>" required>
         </div>
+        <div class="form-group">
+            <label for="lop_id">Lớp học</label>
+            <select name="lop_id" id="lop_id" required>
+                <option value="">-- Chọn lớp --</option>
+                <?php foreach ($lophocs as $lh): ?>
+                    <option value="<?php echo $lh['id']; ?>"
+                        <?php echo ($sinhvien['lop_id'] == $lh['id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($lh['malop'] . ' - ' . $lh['tenlop']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <button type="submit" class="btn-submit">Cập nhật</button>
     </form>
     <a href="/QLSV/public/sinhvien/index" class="btn-back">← Quay lại danh sách</a>

@@ -27,7 +27,7 @@
                     <td><?php echo htmlspecialchars($sv['hoten']); ?></td>
                     <td><?php echo htmlspecialchars($sv['gioitinh']); ?></td>
                     <td><?php echo htmlspecialchars($sv['mssv']); ?></td>
-                    <td><?php echo htmlspecialchars($sv['lop_id']); ?></td>
+                    <td><?php echo htmlspecialchars($sv['malop'] ?? '—'); ?></td>
                     <td>
                         <a href="/QLSV/public/sinhvien/edit/<?php echo $sv['id']; ?>" class="action-link btn-edit">Sửa</a>
                         <a href="/QLSV/public/sinhvien/delete/<?php echo $sv['id']; ?>" class="action-link btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sinh viên này không?');">Xóa</a>
