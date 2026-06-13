@@ -31,8 +31,12 @@ class sinhvienModel
         return $stmt->fetchColumn();
     }
 
-    // Lấy danh sách sinh viên có phân trang + search
-    public function getSinhVienPaging($limit, $offset, $keyword = '', $lop_id = 0) {
+    // Lấy danh sách sinh viên có phân trang + search + sort
+    public function getSinhVienPaging($limit, $offset, $keyword = '', $lop_id = 0, $sort = 'id', $order = 'ASC') {
+        $allowed = ['id', 'mssv', 'hoten', 'gioitinh'];
+        $sort  = in_array($sort, $allowed) ? $sort : 'id';
+        $order = $order === 'DESC' ? 'DESC' : 'ASC';
+
         $kw = '%' . $keyword . '%';
         $stmt = $this->conn->prepare(
             "SELECT sv.*, lh.malop, lh.tenlop
@@ -40,6 +44,7 @@ class sinhvienModel
              LEFT JOIN tbl_lophocs lh ON sv.lop_id = lh.id
              WHERE (sv.hoten LIKE :kw1 OR sv.mssv LIKE :kw2)
                AND (:lop1 = 0 OR sv.lop_id = :lop2)
+             ORDER BY sv.$sort $order
              LIMIT :limit OFFSET :offset"
         );
         $stmt->bindValue(':kw1',  $kw);

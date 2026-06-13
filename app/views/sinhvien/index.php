@@ -1,21 +1,49 @@
+<?php
+// Helper tạo URL sort, giữ keyword + lop_id + page
+function sortUrl($col, $currentSort, $currentOrder, $keyword, $lop_id) {
+    $newOrder = ($currentSort === $col && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
+    $params = array_filter([
+        'keyword' => $keyword,
+        'lop_id'  => $lop_id > 0 ? $lop_id : '',
+        'sort'    => $col,
+        'order'   => $newOrder,
+    ]);
+    return '/QLSV/public/sinhvien/index?' . http_build_query($params);
+}
+
+function sortIcon($col, $currentSort, $currentOrder) {
+    if ($currentSort !== $col) return ' <span style="opacity:.3;font-size:10px;">▲</span>';
+    return $currentOrder === 'ASC' ? ' <span style="font-size:11px;">▲</span>' : ' <span style="font-size:11px;">▼</span>';
+}
+
+$sort    = $sort    ?? 'id';
+$order   = $order   ?? 'ASC';
+$keyword = $keyword ?? '';
+$lop_id  = $lop_id  ?? 0;
+?>
+
 <div class="container">
     <div class="page-header">
         <div class="page-title">
             Danh sách sinh viên
-            <span class="badge-count"><?php echo isset($totalSV) ? $totalSV : ''; ?></span>
+            <span class="badge-count"><?php echo $totalSV ?? 0; ?></span>
         </div>
         <a href="/QLSV/public/sinhvien/create" class="btn-add">+ Thêm sinh viên</a>
     </div>
 
     <form method="GET" action="/QLSV/public/sinhvien/index" class="search-form">
+        <?php if ($sort !== 'id' || $order !== 'ASC'): ?>
+            <input type="hidden" name="sort"  value="<?php echo htmlspecialchars($sort); ?>">
+            <input type="hidden" name="order" value="<?php echo htmlspecialchars($order); ?>">
+        <?php endif; ?>
         <input type="text" name="keyword" class="search-input"
                placeholder="Tìm theo họ tên hoặc MSSV..."
-               value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
+               value="<?php echo htmlspecialchars($keyword); ?>">
         <select name="lop_id" class="search-select">
             <option value="0">-- Tất cả lớp --</option>
             <?php foreach ($lophocs as $lh): ?>
                 <option value="<?php echo $lh['id']; ?>"
-                    <?php echo (($lop_id ?? 0) == $lh['id']) ? 'selected' : ''; ?>>
+                    <?php echo ($lop_id == $lh['id']) ? 'selected' : ''; ?>>
                     <?php echo htmlspecialchars($lh['tenlop']); ?>
                 </option>
             <?php endforeach; ?>
@@ -25,11 +53,27 @@
     </form>
 
     <table>
+        <colgroup>
+            <col style="width:55px">
+            <col style="width:140px">
+            <col style="width:220px">
+            <col style="width:100px">
+            <col>
+            <col style="width:130px">
+        </colgroup>
         <thead>
             <tr>
                 <th>STT</th>
-                <th>MSSV</th>
-                <th>Họ tên</th>
+                <th>
+                    <a href="<?php echo sortUrl('mssv', $sort, $order, $keyword, $lop_id); ?>" class="sort-link">
+                        MSSV<?php echo sortIcon('mssv', $sort, $order); ?>
+                    </a>
+                </th>
+                <th>
+                    <a href="<?php echo sortUrl('hoten', $sort, $order, $keyword, $lop_id); ?>" class="sort-link">
+                        Họ tên<?php echo sortIcon('hoten', $sort, $order); ?>
+                    </a>
+                </th>
                 <th>Giới tính</th>
                 <th>Lớp học</th>
                 <th>Thao tác</th>
@@ -65,14 +109,15 @@
     </table>
 
     <?php
-        $limit   = 5;
         $queryStr = http_build_query(array_filter([
-            'keyword' => $keyword ?? '',
-            'lop_id'  => ($lop_id ?? 0) > 0 ? $lop_id : ''
+            'keyword' => $keyword,
+            'lop_id'  => $lop_id > 0 ? $lop_id : '',
+            'sort'    => $sort !== 'id' ? $sort : '',
+            'order'   => $order !== 'ASC' ? $order : '',
         ]));
         $queryStr = $queryStr ? '?' . $queryStr : '';
-        $from = $totalSV > 0 ? ($currentPage - 1) * $limit + 1 : 0;
-        $to   = min($currentPage * $limit, $totalSV ?? 0);
+        $from = ($totalSV ?? 0) > 0 ? ($currentPage - 1) * 5 + 1 : 0;
+        $to   = min($currentPage * 5, $totalSV ?? 0);
     ?>
     <div class="pagination-wrap">
         <div class="pagination-info">

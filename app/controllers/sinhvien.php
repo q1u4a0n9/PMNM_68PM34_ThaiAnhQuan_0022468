@@ -17,10 +17,12 @@ class sinhvien extends Controller
 
         $keyword = trim($_GET['keyword'] ?? '');
         $lop_id  = (int)($_GET['lop_id'] ?? 0);
+        $sort    = $_GET['sort']  ?? 'id';
+        $order   = $_GET['order'] ?? 'ASC';
 
         $totalSV    = $sinhvienModel->getTotalSinhVien($keyword, $lop_id);
         $totalPages = ceil($totalSV / $limit);
-        $sinhviens  = $sinhvienModel->getSinhVienPaging($limit, $offset, $keyword, $lop_id);
+        $sinhviens  = $sinhvienModel->getSinhVienPaging($limit, $offset, $keyword, $lop_id, $sort, $order);
         $lophocs    = $lophocModel->getAllLopHoc();
 
         $this->view("layout/main-layout", [
@@ -32,6 +34,8 @@ class sinhvien extends Controller
             'lophocs'     => $lophocs,
             'keyword'     => $keyword,
             'lop_id'      => $lop_id,
+            'sort'        => $sort,
+            'order'       => $order,
             'title'       => "Danh sách sinh viên"
         ]);
     }

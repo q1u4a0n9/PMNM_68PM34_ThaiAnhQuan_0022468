@@ -46,10 +46,12 @@
         .btn-reset:hover { background: #7f8c8d; }
 
         /* ── Table ── */
-        table { width: 100%; border-collapse: collapse; margin-top: 4px; }
-        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eef0f3; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 4px; table-layout: fixed; }
+        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #eef0f3; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         th { background: #34495e; color: #fff; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
-        td:first-child, th:first-child { text-align: center; width: 50px; }
+        td:first-child, th:first-child { text-align: center; width: 55px; }
+        td:nth-child(4), th:nth-child(4) { text-align: center; width: 100px; }
+        td:last-child, th:last-child { text-align: center; width: 130px; }
         tr:hover td { background: #f8f9fa; }
         tr:last-child td { border-bottom: none; }
         .empty-data { text-align: center !important; padding: 30px; color: #7f8c8d; font-style: italic; }
@@ -59,6 +61,10 @@
 
         /* ── Badge mã lớp ── */
         .malop-badge { display: inline-block; padding: 3px 9px; border-radius: 5px; font-size: 12px; font-weight: 700; background: #2c3e50; color: #fff; letter-spacing: 0.5px; }
+
+        /* ── Sort link trong header bảng ── */
+        .sort-link { color: #fff; text-decoration: none; white-space: nowrap; }
+        .sort-link:hover { color: #aed6f1; }
 
         /* ── Action buttons ── */
         .action-link { text-decoration: none; padding: 5px 12px; border-radius: 5px; color: #fff; font-size: 13px; font-weight: 500; display: inline-block; margin: 0 2px; transition: opacity 0.2s; }
