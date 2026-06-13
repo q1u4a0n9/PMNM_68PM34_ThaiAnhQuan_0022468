@@ -1,12 +1,13 @@
 <?php
-// Helper tạo URL sort, giữ keyword + lop_id + page
-function sortUrl($col, $currentSort, $currentOrder, $keyword, $lop_id) {
+// Helper tạo URL sort, giữ keyword + lop_id + pageSize
+function sortUrl($col, $currentSort, $currentOrder, $keyword, $lop_id, $pageSize) {
     $newOrder = ($currentSort === $col && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
     $params = array_filter([
-        'keyword' => $keyword,
-        'lop_id'  => $lop_id > 0 ? $lop_id : '',
-        'sort'    => $col,
-        'order'   => $newOrder,
+        'keyword'  => $keyword,
+        'lop_id'   => $lop_id > 0 ? $lop_id : '',
+        'sort'     => $col,
+        'order'    => $newOrder,
+        'pageSize' => $pageSize != 5 ? $pageSize : '',
     ]);
     return '/QLSV/public/sinhvien/index?' . http_build_query($params);
 }
@@ -16,10 +17,11 @@ function sortIcon($col, $currentSort, $currentOrder) {
     return $currentOrder === 'ASC' ? ' <span style="font-size:11px;">▲</span>' : ' <span style="font-size:11px;">▼</span>';
 }
 
-$sort    = $sort    ?? 'id';
-$order   = $order   ?? 'ASC';
-$keyword = $keyword ?? '';
-$lop_id  = $lop_id  ?? 0;
+$sort     = $sort     ?? 'id';
+$order    = $order    ?? 'ASC';
+$keyword  = $keyword  ?? '';
+$lop_id   = $lop_id   ?? 0;
+$pageSize = $pageSize ?? 5;
 ?>
 
 <div class="container">
@@ -28,7 +30,23 @@ $lop_id  = $lop_id  ?? 0;
             Danh sách sinh viên
             <span class="badge-count"><?php echo $totalSV ?? 0; ?></span>
         </div>
-        <a href="/QLSV/public/sinhvien/create" class="btn-add">+ Thêm sinh viên</a>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <form id="pageSizeForm" method="GET" action="/QLSV/public/sinhvien/index" style="display:flex;align-items:center;gap:6px;">
+                <input type="hidden" name="keyword"  value="<?php echo htmlspecialchars($keyword); ?>">
+                <input type="hidden" name="lop_id"   value="<?php echo $lop_id; ?>">
+                <input type="hidden" name="sort"     value="<?php echo htmlspecialchars($sort); ?>">
+                <input type="hidden" name="order"    value="<?php echo htmlspecialchars($order); ?>">
+                <span style="font-size:14px;color:#555;white-space:nowrap;">Hiển thị:</span>
+                <select name="pageSize" class="pagesize-select" onchange="document.getElementById('pageSizeForm').submit()">
+                    <?php foreach ([5,10,25,50] as $ps): ?>
+                        <option value="<?php echo $ps; ?>" <?php echo $pageSize==$ps?'selected':''; ?>>
+                            <?php echo $ps; ?> / trang
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+            <a href="/QLSV/public/sinhvien/create" class="btn-add">+ Thêm sinh viên</a>
+        </div>
     </div>
 
     <form method="GET" action="/QLSV/public/sinhvien/index" class="search-form">
@@ -59,18 +77,18 @@ $lop_id  = $lop_id  ?? 0;
             <col style="width:220px">
             <col style="width:100px">
             <col>
-            <col style="width:130px">
+            <col style="width:160px">
         </colgroup>
         <thead>
             <tr>
                 <th>STT</th>
                 <th>
-                    <a href="<?php echo sortUrl('mssv', $sort, $order, $keyword, $lop_id); ?>" class="sort-link">
+                    <a href="<?php echo sortUrl('mssv', $sort, $order, $keyword, $lop_id, $pageSize); ?>" class="sort-link">
                         MSSV<?php echo sortIcon('mssv', $sort, $order); ?>
                     </a>
                 </th>
                 <th>
-                    <a href="<?php echo sortUrl('hoten', $sort, $order, $keyword, $lop_id); ?>" class="sort-link">
+                    <a href="<?php echo sortUrl('hoten', $sort, $order, $keyword, $lop_id, $pageSize); ?>" class="sort-link">
                         Họ tên<?php echo sortIcon('hoten', $sort, $order); ?>
                     </a>
                 </th>
@@ -81,7 +99,7 @@ $lop_id  = $lop_id  ?? 0;
         </thead>
         <tbody>
             <?php if (!empty($sinhviens)):
-                $stt = ($currentPage - 1) * 5 + 1;
+                $stt = ($currentPage - 1) * $pageSize + 1;
                 foreach ($sinhviens as $sv): ?>
                 <tr>
                     <td><?php echo $stt++; ?></td>
@@ -110,14 +128,15 @@ $lop_id  = $lop_id  ?? 0;
 
     <?php
         $queryStr = http_build_query(array_filter([
-            'keyword' => $keyword,
-            'lop_id'  => $lop_id > 0 ? $lop_id : '',
-            'sort'    => $sort !== 'id' ? $sort : '',
-            'order'   => $order !== 'ASC' ? $order : '',
+            'keyword'  => $keyword,
+            'lop_id'   => $lop_id > 0 ? $lop_id : '',
+            'sort'     => $sort !== 'id' ? $sort : '',
+            'order'    => $order !== 'ASC' ? $order : '',
+            'pageSize' => $pageSize != 5 ? $pageSize : '',
         ]));
         $queryStr = $queryStr ? '?' . $queryStr : '';
-        $from = ($totalSV ?? 0) > 0 ? ($currentPage - 1) * 5 + 1 : 0;
-        $to   = min($currentPage * 5, $totalSV ?? 0);
+        $from = ($totalSV ?? 0) > 0 ? ($currentPage - 1) * $pageSize + 1 : 0;
+        $to   = min($currentPage * $pageSize, $totalSV ?? 0);
     ?>
     <div class="pagination-wrap">
         <div class="pagination-info">

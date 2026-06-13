@@ -9,10 +9,13 @@ class lophoc extends Controller
     {
         $lophocModel = $this->model('lophocModel');
 
-        $limit   = 5;
-        $page    = is_numeric($page) && $page > 0 ? (int)$page : 1;
-        $offset  = ($page - 1) * $limit;
-        $keyword = trim($_GET['keyword'] ?? '');
+        $allowed  = [5, 10, 25, 50];
+        $raw      = (int)($_GET['pageSize'] ?? 5);
+        $pageSize = in_array($raw, $allowed) ? $raw : 5;
+        $limit    = $pageSize;
+        $page     = is_numeric($page) && $page > 0 ? (int)$page : 1;
+        $offset   = ($page - 1) * $limit;
+        $keyword  = trim($_GET['keyword'] ?? '');
 
         $totalLH    = $lophocModel->getTotalLopHoc($keyword);
         $totalPages = ceil($totalLH / $limit);
@@ -25,6 +28,7 @@ class lophoc extends Controller
             'totalLH'     => $totalLH,
             'currentPage' => $page,
             'keyword'     => $keyword,
+            'pageSize'    => $pageSize,
             'title'       => "Danh sách lớp học"
         ]);
     }

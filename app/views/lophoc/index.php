@@ -1,10 +1,24 @@
 <div class="container">
+<?php $pageSize = $pageSize ?? 5; ?>
     <div class="page-header">
         <div class="page-title">
             Danh sách lớp học
-            <span class="badge-count"><?php echo isset($totalLH) ? $totalLH : ''; ?></span>
+            <span class="badge-count"><?php echo $totalLH ?? 0; ?></span>
         </div>
-        <a href="/QLSV/public/lophoc/create" class="btn-add">+ Thêm lớp học</a>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <form id="pageSizeForm" method="GET" action="/QLSV/public/lophoc/index" style="display:flex;align-items:center;gap:6px;">
+                <input type="hidden" name="keyword" value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
+                <span style="font-size:14px;color:#555;white-space:nowrap;">Hiển thị:</span>
+                <select name="pageSize" class="pagesize-select" onchange="document.getElementById('pageSizeForm').submit()">
+                    <?php foreach ([5,10,25,50] as $ps): ?>
+                        <option value="<?php echo $ps; ?>" <?php echo $pageSize==$ps?'selected':''; ?>>
+                            <?php echo $ps; ?> / trang
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </form>
+            <a href="/QLSV/public/lophoc/create" class="btn-add">+ Thêm lớp học</a>
+        </div>
     </div>
 
     <form method="GET" action="/QLSV/public/lophoc/index" class="search-form">
@@ -27,7 +41,7 @@
         </thead>
         <tbody>
             <?php if (!empty($lophocs)):
-                $stt = ($currentPage - 1) * 5 + 1;
+                $stt = ($currentPage - 1) * $pageSize + 1;
                 foreach ($lophocs as $lh): ?>
                 <tr>
                     <td><?php echo $stt++; ?></td>
@@ -48,9 +62,15 @@
     </table>
 
     <?php
-        $queryStr = !empty($keyword) ? '?keyword=' . urlencode($keyword) : '';
-        $from = ($totalLH ?? 0) > 0 ? ($currentPage - 1) * 5 + 1 : 0;
-        $to   = min($currentPage * 5, $totalLH ?? 0);
+        $qs = array_filter([
+            'keyword'  => $keyword ?? '',
+            'pageSize' => ($pageSize ?? 5) != 5 ? $pageSize : '',
+        ]);
+        $queryStr = http_build_query($qs);
+        $queryStr = $queryStr ? '?' . $queryStr : '';
+        $ps  = $pageSize ?? 5;
+        $from = ($totalLH ?? 0) > 0 ? ($currentPage - 1) * $ps + 1 : 0;
+        $to   = min($currentPage * $ps, $totalLH ?? 0);
     ?>
     <div class="pagination-wrap">
         <div class="pagination-info">

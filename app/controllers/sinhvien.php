@@ -11,9 +11,12 @@ class sinhvien extends Controller
         $sinhvienModel = $this->model('sinhvienModel');
         $lophocModel   = $this->model('lophocModel');
 
-        $limit   = 5;
-        $page    = is_numeric($page) && $page > 0 ? (int)$page : 1;
-        $offset  = ($page - 1) * $limit;
+        $allowed  = [5, 10, 25, 50];
+        $raw      = (int)($_GET['pageSize'] ?? 5);
+        $pageSize = in_array($raw, $allowed) ? $raw : 5;
+        $limit    = $pageSize;
+        $page     = is_numeric($page) && $page > 0 ? (int)$page : 1;
+        $offset   = ($page - 1) * $limit;
 
         $keyword = trim($_GET['keyword'] ?? '');
         $lop_id  = (int)($_GET['lop_id'] ?? 0);
@@ -36,6 +39,7 @@ class sinhvien extends Controller
             'lop_id'      => $lop_id,
             'sort'        => $sort,
             'order'       => $order,
+            'pageSize'    => $pageSize,
             'title'       => "Danh sách sinh viên"
         ]);
     }

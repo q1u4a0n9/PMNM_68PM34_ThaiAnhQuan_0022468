@@ -51,7 +51,7 @@
         th { background: #34495e; color: #fff; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
         td:first-child, th:first-child { text-align: center; width: 55px; }
         td:nth-child(4), th:nth-child(4) { text-align: center; width: 100px; }
-        td:last-child, th:last-child { text-align: center; width: 130px; }
+        td:last-child, th:last-child { text-align: center; width: 160px; }
         tr:hover td { background: #f8f9fa; }
         tr:last-child td { border-bottom: none; }
         .empty-data { text-align: center !important; padding: 30px; color: #7f8c8d; font-style: italic; }
@@ -61,6 +61,10 @@
 
         /* ── Badge mã lớp ── */
         .malop-badge { display: inline-block; padding: 3px 9px; border-radius: 5px; font-size: 12px; font-weight: 700; background: #2c3e50; color: #fff; letter-spacing: 0.5px; }
+
+        /* ── PageSize select ── */
+        .pagesize-select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background: #fff; cursor: pointer; }
+        .pagesize-select:focus { outline: none; border-color: #2980b9; }
 
         /* ── Sort link trong header bảng ── */
         .sort-link { color: #fff; text-decoration: none; white-space: nowrap; }
