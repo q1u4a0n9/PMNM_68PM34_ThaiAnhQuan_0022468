@@ -13,9 +13,6 @@ class home extends Controller
 
     public function login()
     {
-        $this->view("layout/main-layout", [
-            'viewname' => 'home/login',
-            'title'    => 'Đăng nhập'
-        ]);
+        require_once '../app/views/home/login.php';
     }
 }

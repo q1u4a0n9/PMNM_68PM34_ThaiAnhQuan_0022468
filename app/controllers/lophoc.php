@@ -59,18 +59,21 @@ class lophoc extends Controller
         
         $lophocModel = $this->model('lophocModel');
         $result = $lophocModel->update($id, $malop, $tenlop, $ghichu);
-        
         if ($result) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Cập nhật lớp học thành công!'];
             header("Location: /QLSV/public/lophoc/index");
         } else {
-            echo "Cập nhật lớp học thất bại";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Cập nhật lớp học thất bại!'];
+            header("Location: /QLSV/public/lophoc/index");
         }
+        exit();
     }
 
     // Xử lý xóa
     public function delete($id) {
         $lophocModel = $this->model('lophocModel');
         $lophocModel->delete($id);
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Xóa lớp học thành công!'];
         header("Location: /QLSV/public/lophoc/index");
         exit();
     }
@@ -91,12 +94,14 @@ class lophoc extends Controller
         
         $lophocModel = $this->model('lophocModel');
         $result = $lophocModel->create($malop, $tenlop, $ghichu);
-        
         if($result) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Thêm lớp học thành công!'];
             header("Location: /QLSV/public/lophoc/index");
         } else {
-            echo "Thêm mới lớp học thất bại";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Thêm lớp học thất bại!'];
+            header("Location: /QLSV/public/lophoc/create");
         }
+        exit();
     }
 }
 ?>

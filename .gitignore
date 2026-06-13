@@ -1,0 +1,17 @@
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# XAMPP / PHP
+error_log
+php_errorlog
+

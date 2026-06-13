@@ -16,6 +16,10 @@ class middleware
         // Chỉ cần controller/action để so sánh
         $currentUrl = implode('/', array_slice($parts, 0, 2));
         if (empty($currentUrl)) $currentUrl = 'home/index';
+        // Nếu chỉ có controller, không có action → mặc định là index
+        if (strpos($currentUrl, '/') === false && !empty($currentUrl)) {
+            $currentUrl .= '/index';
+        }
 
         if(!isset($_SESSION["username"]) && !in_array($currentUrl, $publicPages)){
             header("Location: /QLSV/public/home/login");

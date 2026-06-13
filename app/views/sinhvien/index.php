@@ -104,9 +104,9 @@ $pageSize = $pageSize ?? 5;
                 <tr>
                     <td><?php echo $stt++; ?></td>
                     <td><?php echo htmlspecialchars($sv['mssv']); ?></td>
-                    <td><?php echo htmlspecialchars($sv['hoten']); ?></td>
+                    <td style="white-space:normal;"><?php echo htmlspecialchars($sv['hoten']); ?></td>
                     <td><?php echo htmlspecialchars($sv['gioitinh']); ?></td>
-                    <td>
+                    <td style="white-space:normal;">
                         <?php if (!empty($sv['tenlop'])): ?>
                             <span class="lop-badge"><?php echo htmlspecialchars($sv['tenlop']); ?></span>
                         <?php else: ?>

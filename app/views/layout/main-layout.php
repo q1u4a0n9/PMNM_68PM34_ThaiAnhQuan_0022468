@@ -33,6 +33,8 @@
         /* ── Nút thêm ── */
         .btn-add { display: inline-flex; align-items: center; gap: 6px; background: #27ae60; color: #fff; padding: 9px 18px; text-decoration: none; border-radius: 7px; font-weight: 600; font-size: 14px; transition: background 0.2s; white-space: nowrap; }
         .btn-add:hover { background: #219150; }
+        .btn-add-blue { background: #2980b9; }
+        .btn-add-blue:hover { background: #2471a3; }
 
         /* ── Search form ── */
         .search-form { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
@@ -57,7 +59,7 @@
         .empty-data { text-align: center !important; padding: 30px; color: #7f8c8d; font-style: italic; }
 
         /* ── Badge lớp học ── */
-        .lop-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #e8f4fd; color: #1a6fa8; white-space: nowrap; }
+        .lop-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; background: #e8f4fd; color: #1a6fa8; }
 
         /* ── Badge mã lớp ── */
         .malop-badge { display: inline-block; padding: 3px 9px; border-radius: 5px; font-size: 12px; font-weight: 700; background: #2c3e50; color: #fff; letter-spacing: 0.5px; }
@@ -84,6 +86,16 @@
         .pagination a.active { background: #2980b9; color: #fff; border-color: #2980b9; }
         .pagination a:hover:not(.active) { background: #f1f1f1; }
 
+        /* ── Flash message ── */
+        .flash { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 9999; padding: 13px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); white-space: nowrap; }
+        .flash-success { background: #d4edda; border: 1px solid #b8dac6; color: #155724; }
+        .flash-error   { background: #f8d7da; border: 1px solid #f1b8be; color: #721c24; }
+
+        /* ── Validate errors ── */
+        .just-validate-error-label { color: #e74c3c; font-size: 12px; margin-top: 5px; display: block; }
+        .just-validate-error-field { border-color: #e74c3c !important; }
+        .just-validate-success-field { border-color: #27ae60 !important; }
+
         /* ── Form create/edit ── */
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: #555; font-size: 14px; }
@@ -98,9 +110,29 @@
     </style>
 </head>
 <body>
+    <?php if (isset($_SESSION['username']) && file_exists('../app/views/layout/partial/fx.php')): ?>
+        <?php require_once '../app/views/layout/partial/fx.php'; ?>
+    <?php endif; ?>
+
     <?php require_once '../app/views/layout/partial/header.php'; ?>
 
     <div class="content">
+        <?php if (!empty($_SESSION['flash'])): ?>
+            <div class="flash flash-<?php echo $_SESSION['flash']['type']; ?>" id="flash-msg">
+                <?php echo htmlspecialchars($_SESSION['flash']['message']); ?>
+            </div>
+            <?php unset($_SESSION['flash']); ?>
+            <script>
+                setTimeout(() => {
+                    const el = document.getElementById('flash-msg');
+                    if (el) {
+                        el.style.transition = 'opacity 0.5s';
+                        el.style.opacity = '0';
+                        setTimeout(() => el.remove(), 500);
+                    }
+                }, 2000);
+            </script>
+        <?php endif; ?>
         <?php if (isset($viewname)) {
             require_once '../app/views/' . $viewname . '.php';
         } ?>

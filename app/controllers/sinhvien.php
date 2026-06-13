@@ -70,15 +70,19 @@ class sinhvien extends Controller
         $sinhvienModel = $this->model('sinhvienModel');
         $result = $sinhvienModel->update($id, $hoten, $gioitinh, $mssv, $lop_id);
         if ($result) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Cập nhật sinh viên thành công!'];
             header("Location: /QLSV/public/sinhvien/index");
         } else {
-            echo "Cập nhật sinh viên thất bại";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Cập nhật sinh viên thất bại!'];
+            header("Location: /QLSV/public/sinhvien/index");
         }
+        exit();
     }
 
     public function delete($id) {
         $sinhvienModel = $this->model('sinhvienModel');
         $sinhvienModel->delete($id);
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Xóa sinh viên thành công!'];
         header("Location: /QLSV/public/sinhvien/index");
         exit();
     }
@@ -101,10 +105,13 @@ class sinhvien extends Controller
         $sinhvienModel = $this->model('sinhvienModel');
         $result = $sinhvienModel->create($hoten, $gioitinh, $mssv, $lop_id);
         if($result) {
+            $_SESSION['flash'] = ['type' => 'success', 'message' => 'Thêm sinh viên thành công!'];
             header("Location: /QLSV/public/sinhvien/index");
         } else {
-            echo "Thêm mới sinh viên thất bại";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Thêm sinh viên thất bại!'];
+            header("Location: /QLSV/public/sinhvien/create");
         }
+        exit();
     }
 
 }

@@ -30,12 +30,19 @@
     </form>
 
     <table>
+        <colgroup>
+            <col style="width:55px">
+            <col style="width:120px">
+            <col>
+            <col style="width:280px">
+            <col style="width:160px">
+        </colgroup>
         <thead>
             <tr>
                 <th>STT</th>
                 <th>Mã lớp</th>
                 <th>Tên lớp</th>
-                <th>Ghi chú</th>
+                <th style="text-align:left;">Ghi chú</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -46,8 +53,8 @@
                 <tr>
                     <td><?php echo $stt++; ?></td>
                     <td><span class="malop-badge"><?php echo htmlspecialchars($lh['malop']); ?></span></td>
-                    <td><?php echo htmlspecialchars($lh['tenlop']); ?></td>
-                    <td><?php echo htmlspecialchars($lh['ghichu']); ?></td>
+                    <td style="white-space:normal;"><?php echo htmlspecialchars($lh['tenlop']); ?></td>
+                    <td style="white-space:normal;text-align:left;"><?php echo htmlspecialchars($lh['ghichu']); ?></td>
                     <td>
                         <a href="/QLSV/public/lophoc/edit/<?php echo $lh['id']; ?>" class="action-link btn-edit">Sửa</a>
                         <a href="/QLSV/public/lophoc/delete/<?php echo $lh['id']; ?>" class="action-link btn-delete"

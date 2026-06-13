@@ -7,19 +7,25 @@ class auth
     ];
     public function login()
     {
-    if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
-        $username = $_POST['username'] ?? '';
-        $password = $_POST['password'] ?? '';
-        if(isset($this->user[$username]) && $this->user[$username] == $password){
-        $_SESSION['username'] = $username;   
-        header('Location: /QLSV/public/home/index');
-            exit();
-        }else{
-            header('Location: /QLSV/public/home/login');
-            exit();
+        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
+            $username = $_POST['username'] ?? '';
+            $password = $_POST['password'] ?? '';
+            if(isset($this->user[$username]) && $this->user[$username] == $password){
+                $_SESSION['username'] = $username;
+                header('Location: /QLSV/public/home/index');
+                exit();
+            } else {
+                header('Location: /QLSV/public/home/login?error=1');
+                exit();
+            }
         }
     }
+
+    public function logout()
+    {
+        session_destroy();
+        header('Location: /QLSV/public/home');
+        exit();
     }
-    
 }
 ?>
