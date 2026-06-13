@@ -5,19 +5,20 @@ require_once("../app/core/App.php");
 class middleware
 {
      function checklogin(){
-        // 1. SỬA LỖI VÒNG LẶP: Thêm 'home/login' vào danh sách các trang không bị chặn
-        $publicPages = ['home/index', 'home/login', 'auth/login']; 
-        
-        // 2. SỬA LỖI SO SÁNH: Lấy url từ .htaccess truyền qua. 
-        // Nếu vừa vào trang chủ không gõ gì thì mặc định là 'home/index'
-        $currentUrl = isset($_GET['url']) ? rtrim($_GET['url'], '/') : 'home/index';
+        $publicPages = ['home/index', 'home/login', 'auth/login'];
 
-        // 3. Tiến hành kiểm tra
+        // Parse URL giống App.php: strip prefix 'QLSV' và 'public' nếu bị dính vào
+        $rawUrl = isset($_GET['url']) ? trim($_GET['url'], '/') : '';
+        $parts  = explode('/', $rawUrl);
+        if (isset($parts[0]) && $parts[0] === 'QLSV')   array_shift($parts);
+        if (isset($parts[0]) && $parts[0] === 'public')  array_shift($parts);
+
+        // Chỉ cần controller/action để so sánh
+        $currentUrl = implode('/', array_slice($parts, 0, 2));
+        if (empty($currentUrl)) $currentUrl = 'home/index';
+
         if(!isset($_SESSION["username"]) && !in_array($currentUrl, $publicPages)){
-            // Nếu chưa đăng nhập và đang vào trang cấm -> Đá về login
-            // Code cũ: header("Location: /home/login");
-// Code mới:
-        header("Location: /QLSV/public/home/login");
+            header("Location: /QLSV/public/home/login");
             exit();
         }
      }
